@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Quiz 🎉</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #ffdde1, #ee9ca7);
+        text-align: center;
+        padding: 20px;
+    }
+    h1 {
+        color: #ff4081;
+        animation: bounce 1.2s infinite alternate;
+    }
+    @keyframes bounce {
+        to { transform: translateY(-8px); }
+    }
+    .container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        max-width: 650px;
+        margin: auto;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    .question {
+        font-size: 18px;
+        margin: 15px 0;
+    }
+    .options {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    button.option {
+        background: #ff80ab;
+        color: white;
+        border: none;
+        padding: 10px;
+        margin: 5px;
+        width: 80%;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 16px;
+    }
+    button.option:hover {
+        background: #ff4081;
+        transform: scale(1.05);
+    }
+    .correct { background: #4CAF50 !important; }
+    .wrong { background: #e74c3c !important; }
+    #result {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    .progress-bar {
+        background: #eee;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 15px 0;
+        height: 15px;
+    }
+    .progress {
+        height: 100%;
+        background: linear-gradient(90deg, #ff80ab, #ff4081);
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+    .play-again, .start-btn {
+        background: #ff4081;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    img {
+        max-width: 100%;
+        border-radius: 10px;
+        margin: 10px 0;
+    }
+</style>
+</head>
+<body>
+
+<h1>🎂 Birthday Girl Quiz 🎉</h1>
+
+<div id="landing" class="container">
+    <img src="https://cdn.pixabay.com/photo/2017/08/30/01/05/birthday-2696554_960_720.jpg" alt="Birthday Cake">
+    <img src="https://cdn.pixabay.com/photo/2016/03/09/15/11/balloons-1247599_960_720.jpg" alt="Balloons">
+    <h2>Are you ready to test how well you know me? 💖</h2>
+    <p>Click the button below to start the quiz!</p>
+    <button class="start-btn" onclick="startQuiz()">Start Quiz 🎯</button>
+</div>
+
+<div id="quiz-container" class="container" style="display:none;">
+    <div class="progress-bar"><div class="progress" id="progress"></div></div>
+    <div id="quiz"></div>
+    <p id="result"></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+const questions = [
+    { question: "What is my favorite color?", options: ["Pink", "Blue", "Black", "Green"], answer: "Blue" },
+    { question: "What is my favorite food?", options: ["Pizza", "Pasta", "Biryani", "Burger"], answer: "Biryani" },
+    { question: "What is my dream vacation spot?", options: ["Paris", "Maldives", "New York", "Switzerland"], answer: "Switzerland" },
+    { question: "What's my favourite genre of music?", options: ["Pop", "Rap", "Classical", "Jazz"], answer: "Pop" },
+    { question: "What's my favorite movie genre?", options: ["Romance", "Horror", "Comedy", "Action"], answer: "Horror" },
+    { question: "Who's my first love?", options: ["Zayn", "Vijay devarakonda", "Hrithik Roshan", "Shahid Kapoor"], answer: "Shahid Kapoor" },
+    { question: "Which sport do I like the most?", options: ["Cricket", "Badminton", "Football", "Tennis"], answer: "Badminton" },
+    { question: "Who's my emergency contact?", options: ["Soha", "Me", "Pallavi", "My cousin"], answer: "My cousin" },
+    { question: "Which season do I love the most?", options: ["Summer", "Winter", "Spring", "Rainy"], answer: "Winter" },
+    { question: "What's my favourite song currently?", options: ["Tera rastha chodu na", "Cruel summer", "Sayyiyara", "Pillowtalk"], answer: "Tera rastha chodu na" }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+function startQuiz() {
+    document.getElementById("landing").style.display = "none";
+    document.getElementById("quiz-container").style.display = "block";
+    loadQuestion();
+}
+
+function loadQuestion() {
+    if (currentQuestion < questions.length) {
+        const q = questions[currentQuestion];
+        document.getElementById("quiz").innerHTML = `
+            <div class="question">${q.question}</div>
+            <div class="options">
+                ${q.options.map(option => 
+                    `<button class="option" onclick="checkAnswer(this, '${option}')">${option}</button>`
+                ).join("")}
+            </div>
+        `;
+        document.getElementById("progress").style.width = ((currentQuestion) / questions.length) * 100 + "%";
+    } else {
+        document.getElementById("quiz").innerHTML = `<h2>🎉 Quiz Over! 🎉</h2>`;
+        document.getElementById("result").innerHTML = `You got ${score} out of ${questions.length} correct! 🏆`;
+        document.getElementById("progress").style.width = "100%";
+        launchConfetti();
+        document.getElementById("quiz").innerHTML += `<button class="play-again" onclick="restartQuiz()">Play Again 🔄</button>`;
+    }
+}
+
+function checkAnswer(button, selected) {
+    const correctAnswer = questions[currentQuestion].answer;
+    if (selected === correctAnswer) {
+        button.classList.add("correct");
+        score++;
+    } else {
+        button.classList.add("wrong");
+        document.querySelectorAll(".option").forEach(btn => {
+            if (btn.textContent === correctAnswer) btn.classList.add("correct");
+        });
+    }
+    document.querySelectorAll(".option").forEach(btn => btn.disabled = true);
+    setTimeout(() => {
+        currentQuestion++;
+        loadQuestion();
+    }, 1000);
+}
+
+function restartQuiz() {
+    currentQuestion = 0;
+    score = 0;
+    document.getElementById("result").textContent = "";
+    startQuiz();
+}
+
+function launchConfetti() {
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+}
+</script>
+
+</body>
+</html>
+
+
