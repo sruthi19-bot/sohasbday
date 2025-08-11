@@ -89,22 +89,26 @@
         cursor: pointer;
         margin-top: 20px;
     }
-    img {
-        max-width: 100%;
-        border-radius: 10px;
-        margin: 10px 0;
-    }
     /* Decorative side images */
-    .side-image {
-        position: absolute;
-        width: 100px;
-        height: auto;
-        z-index: 0;
-    }
-    .side-image.top-left { top: 20px; left: 20px; }
-    .side-image.top-right { top: 20px; right: 20px; }
-    .side-image.bottom-left { bottom: 20px; left: 20px; }
-    .side-image.bottom-right { bottom: 20px; right: 20px; }
+.side-image {
+    width: 200px;   /* Increased from 150px */
+    height: auto;   /* Keep aspect ratio */
+    border-radius: 10px;
+}
+
+/* Ensure they are not limited by global img styling */
+.side-image img {
+    max-width: none;
+    width: 100%;
+    height: auto;
+}
+
+/* Positioning */
+.side-image.top-left { top: 20px; left: 20px; position: fixed; }
+.side-image.top-right { top: 20px; right: 20px; position: fixed; }
+.side-image.bottom-left { bottom: 20px; left: 20px; position: fixed; }
+.side-image.bottom-right { bottom: 20px; right: 20px; position: fixed; }
+
 </style>
 </head>
 <body>
@@ -208,6 +212,7 @@ function launchConfetti() {
 
 </body>
 </html>
+
 
 
 
