@@ -10,6 +10,7 @@
         background: linear-gradient(to right, #ffdde1, #ee9ca7);
         text-align: center;
         padding: 20px;
+        position: relative;
     }
     h1 {
         color: #ff4081;
@@ -26,6 +27,8 @@
         margin: auto;
         box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         animation: fadeIn 0.6s ease-in-out;
+        position: relative;
+        z-index: 1;
     }
     @keyframes fadeIn {
         from { opacity: 0; transform: scale(0.95); }
@@ -91,9 +94,26 @@
         border-radius: 10px;
         margin: 10px 0;
     }
+    /* Decorative side images */
+    .side-image {
+        position: absolute;
+        width: 100px;
+        height: auto;
+        z-index: 0;
+    }
+    .side-image.top-left { top: 20px; left: 20px; }
+    .side-image.top-right { top: 20px; right: 20px; }
+    .side-image.bottom-left { bottom: 20px; left: 20px; }
+    .side-image.bottom-right { bottom: 20px; right: 20px; }
 </style>
 </head>
 <body>
+
+<!-- Four permanent side images -->
+<img src="" class="side-image top-left" alt="Cake">
+<img src="" class="side-image top-right" alt="Balloons">
+<img src="" class="side-image bottom-left" alt="Cupcake">
+<img src="" class="side-image bottom-right" alt="Confetti">
 
 <h1>🎂 Birthday Girl Quiz 🎉</h1>
 
@@ -188,5 +208,7 @@ function launchConfetti() {
 
 </body>
 </html>
+
+
 
 
