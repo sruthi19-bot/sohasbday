@@ -90,25 +90,33 @@
         margin-top: 20px;
     }
     /* Decorative side images */
-.side-image {
-    width: 300px;   /* Increased from 150px */
-    height: auto;   /* Keep aspect ratio */
-    border-radius: 10px;
-}
+    .side-image {
+        width: 300px;      /* Large size for desktop */
+        max-width: 25vw;   /* Responsive for smaller screens */
+        height: auto;
+        border-radius: 12px;
+        z-index: 0;
+        opacity: 0.9;
+    }
 
-/* Ensure they are not limited by global img styling */
-.side-image img {
-    max-width: none;
-    width: 100%;
-    height: auto;
-}
+    /* Positioning */
+    .side-image.top-left { top: 10px; left: 10px; position: fixed; }
+    .side-image.top-right { top: 10px; right: 10px; position: fixed; }
+    .side-image.bottom-left { bottom: 10px; left: 10px; position: fixed; }
+    .side-image.bottom-right { bottom: 10px; right: 10px; position: fixed; }
 
-/* Positioning */
-.side-image.top-left { top: 20px; left: 20px; position: fixed; }
-.side-image.top-right { top: 20px; right: 20px; position: fixed; }
-.side-image.bottom-left { bottom: 20px; left: 20px; position: fixed; }
-.side-image.bottom-right { bottom: 20px; right: 20px; position: fixed; }
+    /* Keep them behind the main quiz container */
+    .side-image {
+        pointer-events: none;
+    }
 
+    /* Make sure on very small screens they shrink */
+    @media (max-width: 768px) {
+        .side-image {
+            width: 150px;
+            max-width: 35vw;
+        }
+    }
 </style>
 </head>
 <body>
@@ -212,6 +220,8 @@ function launchConfetti() {
 
 </body>
 </html>
+
+
 
 
 
